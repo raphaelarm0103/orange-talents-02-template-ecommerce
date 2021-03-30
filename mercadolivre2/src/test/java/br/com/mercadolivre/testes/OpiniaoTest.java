@@ -49,13 +49,14 @@ public class OpiniaoTest {
 
 	}
 	@Test
-	@DisplayName("Cadastra opinião sem estar logado")
+	@DisplayName("Cadastra opinião sem Titulo")
+	@WithUserDetails("raphael@gmail.com")
 	public void naoDeveCadastrarSemLogar() throws Exception {
-		OpiniaoRequest opiniao = new OpiniaoRequest(3, "Gostei do produto", "Muito bom atendeu");
+		OpiniaoRequest opiniao = new OpiniaoRequest( 3, " ", "Muito bom atendeu");
 		String objeto = objectMapper.writeValueAsString(opiniao);
 
 		mockMvc.perform(post("/produtos/1/opinioes").contentType(MediaType.APPLICATION_JSON).content(objeto))
-				.andExpect(status().is(500));
+				.andExpect(status().isBadRequest());
 
 		assertNotNull(opiniao.getTitulo());
 
